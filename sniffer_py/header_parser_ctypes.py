@@ -21,7 +21,9 @@ class IP(Structure):
         return cls.from_buffer_copy(socket_buffer)
 
     def __init__(self, socket_buffer=None):
+        self.socket_buffer = socket_buffer
+
         # human readable IP addresses
-        self.src_address = socket.inet_ntoa(struct.pack("<L", self.src))
-        self.dst_address = socket.inet_ntoa(struct.pack("<L", self.dst))
+        self.src_address = socket.inet_ntoa(struct.pack("@I", self.src))
+        self.dst_address = socket.inet_ntoa(struct.pack("@I", self.dst))
 

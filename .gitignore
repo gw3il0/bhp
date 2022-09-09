@@ -1,6 +1,7 @@
 # Files
 *.pdf
 *.key
+BHPCode/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
